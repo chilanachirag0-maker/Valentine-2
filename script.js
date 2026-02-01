@@ -1,25 +1,15 @@
 const bgMusic = document.getElementById("bgMusic");
 bgMusic.volume = 0.3;
 
-// FORCE PLAY ON ANY USER ACTION
-function forcePlayMusic() {
-    bgMusic.play()
-        .then(() => {
-            console.log("Music playing");
-        })
-        .catch(err => {
-            console.log("Autoplay blocked:", err);
-        });
+const overlay = document.getElementById("soundOverlay");
+const soundBtn = document.getElementById("soundBtn");
 
-    document.removeEventListener("click", forcePlayMusic);
-    document.removeEventListener("touchstart", forcePlayMusic);
-}
+soundBtn.addEventListener("click", () => {
+    bgMusic.play();
+    overlay.style.display = "none";
+});
 
-// Attach listeners
-document.addEventListener("click", forcePlayMusic);
-document.addEventListener("touchstart", forcePlayMusic);
-
-// BUTTON LOGIC
+// EXISTING LOGIC
 const messages = [
     "Are you sure?",
     "Really sure??",
