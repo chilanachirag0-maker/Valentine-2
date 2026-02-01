@@ -1,3 +1,25 @@
+const bgMusic = document.getElementById("bgMusic");
+bgMusic.volume = 0.3;
+
+// FORCE PLAY ON ANY USER ACTION
+function forcePlayMusic() {
+    bgMusic.play()
+        .then(() => {
+            console.log("Music playing");
+        })
+        .catch(err => {
+            console.log("Autoplay blocked:", err);
+        });
+
+    document.removeEventListener("click", forcePlayMusic);
+    document.removeEventListener("touchstart", forcePlayMusic);
+}
+
+// Attach listeners
+document.addEventListener("click", forcePlayMusic);
+document.addEventListener("touchstart", forcePlayMusic);
+
+// BUTTON LOGIC
 const messages = [
     "Are you sure?",
     "Really sure??",
@@ -13,42 +35,17 @@ const messages = [
 
 let messageIndex = 0;
 
-// ===== MUSIC AUTOPLAY LOGIC =====
-const bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0.4;
-let musicStarted = false;
+document.querySelector(".no-button").onclick = () => {
+    const noBtn = document.querySelector(".no-button");
+    const yesBtn = document.querySelector(".yes-button");
 
-function startMusic() {
-    if (!musicStarted) {
-        bgMusic.play().catch(() => {});
-        musicStarted = true;
-
-        document.removeEventListener("click", startMusic);
-        document.removeEventListener("scroll", startMusic);
-        document.removeEventListener("touchstart", startMusic);
-    }
-}
-
-// Start music on first interaction
-document.addEventListener("click", startMusic);
-document.addEventListener("scroll", startMusic);
-document.addEventListener("touchstart", startMusic);
-
-// ===== BUTTON LOGIC =====
-function handleNoClick() {
-    startMusic();
-
-    const noButton = document.querySelector('.no-button');
-    const yesButton = document.querySelector('.yes-button');
-
-    noButton.textContent = messages[messageIndex];
+    noBtn.textContent = messages[messageIndex];
     messageIndex = (messageIndex + 1) % messages.length;
 
-    const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
-    yesButton.style.fontSize = `${currentSize * 1.5}px`;
-}
+    const size = parseFloat(getComputedStyle(yesBtn).fontSize);
+    yesBtn.style.fontSize = size * 1.4 + "px";
+};
 
-function handleYesClick() {
-    startMusic();
+document.querySelector(".yes-button").onclick = () => {
     window.location.href = "yes_page.html";
-}
+};
